@@ -1,0 +1,59 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:2.1.0'
+	}
+}
+
+allprojects {
+	repositories {
+		jcenter()
+	}
+}
+
+apply plugin: 'android'
+android {
+	useLibrary 'org.apache.http.legacy'
+	compileSdkVersion 'android-23'
+	buildToolsVersion '23.0.3'
+
+	defaultConfig {
+		minSdkVersion 15
+		targetSdkVersion 23
+
+		versionCode 100
+		versionName "1.0.0"
+	}
+
+	signingConfigs {
+		release {
+			storeFile file("../iansoft.keystore")
+			keyAlias "ianyuen"
+			keyPassword "123456"
+			storePassword "123456"
+		}
+	}
+
+	buildTypes {
+		debug {
+			debuggable true
+			signingConfig signingConfigs.release
+		}
+
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+			signingConfig signingConfigs.release
+		}
+	}
+
+	tasks.withType(JavaCompile) {
+		options.compilerArgs << "-Xlint:deprecation"
+	}
+}
+
+dependencies {
+	compile 'com.facebook.android:audience-network-sdk:4.11.0'
+}
