@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">xem tỷ giá</string>
+
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+
+	<string name="facebook_app_id">1097012013682246</string>
+	<string name="banner_home_bottom">1097012013682246_1097012453682202</string>
+	<string name="intertitial_exit_application">1097012013682246_1097102053673242</string>
+
+	<string name="buy">Mua vào</string>
+	<string name="sell">Bán ra</string>
+	<string name="transfer">C.Khoản</string>
+
+	<string name="name_hint">Họ và Tên</string>
+	<string name="phone_hint">số điện thoại</string>
+	<string name="missing_name">Bạn chưa nhập tên. Vui lòng kiểm tra lại!</string>
+	<string name="missing_phone">Bạn chưa nhập số điện thoại. Vui lòng kiểm tra lại!</string>
+	<string name="reward_description">Chỉ cần chạy ứng dụng và bấm vào 1 quảng cáo bất kỳ, bạn sẽ được tặng một mã số bốc thăm may mắn. Mỗi tuần, một số khách hàng may mắn sẽ được tặng 1 thẻ cào 20000. Điền thông tin ở bên dưới rồi nhấn đăng ký để bắt đầu tham gia nhận quà.</string>
+	<string name="reward_notification">Thông tin của bạn đã được ghi nhận.</string>
 </resources>

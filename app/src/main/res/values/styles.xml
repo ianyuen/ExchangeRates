@@ -1,0 +1,18 @@
+<resources>
+	<style
+		name="AppTheme"
+		parent="Theme.AppCompat.Light.DarkActionBar"
+	>
+		<item name="colorAccent">@color/lightPink</item>
+		<item name="colorPrimary">@color/moderateBlue</item>
+		<item name="colorPrimaryDark">@color/darkModerateBlue</item>
+	</style>
+
+	<style name="AppTheme.NoActionBar">
+		<item name="windowNoTitle">true</item>
+		<item name="windowActionBar">false</item>
+	</style>
+
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+</resources>
