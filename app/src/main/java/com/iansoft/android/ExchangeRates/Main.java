@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import com.jirbo.adcolony.*;
+
 import com.iansoft.android.Log;
 import com.iansoft.android.Config;
 import com.iansoft.android.AdManager.FacebookBanner;
@@ -30,7 +32,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.design.widget.NavigationView;
 
-public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdColonyAdAvailabilityListener, AdColonyV4VCListener, AdColonyAdListener {
 	private static Activity m_sInstance = null;
 
 	private Button reward = null;
@@ -43,6 +45,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 	private EpochManager epoch = null;
 	private FacebookBanner banner = null;
 	private PreferencesManager preferences = null;
+
+	final private String APP_ID  = "app95ccde4e50564561a8";
+	final private String ZONE_ID = "vz5e29f5c49b674f3f96";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		preferences = new PreferencesManager();
 		InitNavigationView();
 		ShowSJC();
+
+		AdColony.configure(this, "version:1.0,store:google", APP_ID, ZONE_ID);
+		AdColony.addAdAvailabilityListener(this);
+		AdColony.addV4VCListener(this);
 	}
 
 	@Override
@@ -155,6 +164,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
 		gridView.setNumColumns(HandleVCB.GetInstance().GetNumberColume());
 		gridView.setAdapter(new GridViewAdapter(HandleVCB.GetInstance().GetData()));
+		AdColonyV4VCAd ad = new AdColonyV4VCAd().withConfirmationDialog().withResultsDialog().withListener(Main.this);
+		ad.show();
 	}
 
 	private void ShowReward() {
@@ -250,5 +261,32 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		navigationView.getMenu().findItem(R.id.nav_reward).setVisible(false);
 		preferences.putBoolean("registeredReward", true);
 		ShowSJC();
+	}
+
+	@Override
+	public void onAdColonyAdStarted(AdColonyAd ad) {
+		Log.print("");
+	}
+
+	@Override
+	public void onAdColonyV4VCReward(AdColonyV4VCReward reward) {
+		Log.print("");
+		if (reward.success()) {
+			int amount  = reward.amount();
+			String name = reward.name();
+
+			Log.print("name: " + name);
+			Log.print("amount: " + amount);
+		}
+	}
+
+	@Override
+	public void onAdColonyAdAttemptFinished(AdColonyAd ad) {
+		Log.print("");
+	}
+
+	@Override
+	public void onAdColonyAdAvailabilityChange(final boolean available, String zone_id) {
+		Log.print("");
 	}
 }
