@@ -81,10 +81,6 @@ public class FacebookInterstitial implements InterstitialAdListener {
 		}
 	}
 
-	public Boolean isShowed() {
-		return isShowed;
-	}
-
 	private void hideAds() {
 		long currentEpoch = epochManager.getCurrentEpoch();
 		preferences.putLong(Constant.HIDE_INTERSTITIAL_EXPIRED, currentEpoch + Constant.EXPRIED_TIME);

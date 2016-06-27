@@ -145,6 +145,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 			int amount  = reward.amount();
 			String name = reward.name();
 			preferences.putInt(Constant.HIDE_ALL_EXPIRED, epoch.getCurrentDate());
+
+			String androidID = Config.getAndroidID();
+			String url = "https://docs.google.com/forms/d/1xsIgZLLR1IRmNWPlPzXyrTIsViFcW7UYM6dsy1XDxO8/formResponse";
+			String data = "rewarded=" + androidID + "&entry.874539945=" + androidID;
+
+			ConnectServer connect = new ConnectServer(this);
+			connect.sendPost(url, data);
 		}
 	}
 

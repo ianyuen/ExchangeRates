@@ -57,9 +57,7 @@ public class Splash extends Activity {
 	@Override
 	protected void onDestroy() {
 		if (interstitial != null) {
-			if (!interstitial.isShowed()) {
-				interstitial.show();
-			}
+			interstitial.show();
 		}
 		super.onDestroy();
 	}
