@@ -14,6 +14,10 @@
 	<item>
 		<menu>
 			<item
+				android:id="@+id/nav_hide_ads"
+				android:title="Tắt quảng cáo"
+			/>
+			<item
 				android:id="@+id/nav_reward"
 				android:title="Nhận quà"
 			/>

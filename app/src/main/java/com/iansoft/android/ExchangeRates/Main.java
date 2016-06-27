@@ -62,15 +62,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		description = (TextView)findViewById(R.id.description);
 
 		banner = new FacebookBanner(this, getResources().getString(R.string.banner_home_bottom), findViewById(R.id.mainLayout));
+		AdColony.configure(this, "version:1.0,store:google", APP_ID, ZONE_ID);
+		AdColony.addAdAvailabilityListener(this);
+		AdColony.addV4VCListener(this);
 
 		epoch = new EpochManager();
 		preferences = new PreferencesManager();
 		InitNavigationView();
 		ShowSJC();
-
-		AdColony.configure(this, "version:1.0,store:google", APP_ID, ZONE_ID);
-		AdColony.addAdAvailabilityListener(this);
-		AdColony.addV4VCListener(this);
 	}
 
 	@Override
@@ -80,6 +79,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 			ShowSJC();
 		} else if (id == R.id.nav_vcb) {
 			ShowVCB();
+		} else if (id == R.id.nav_hide_ads) {
+			ShowVideo();
 		} else if (id == R.id.nav_reward) {
 			ShowReward();
 		} else if (id == R.id.nav_upload) {
@@ -130,6 +131,26 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		}
 	}
 
+	@Override
+	public void onAdColonyAdStarted(AdColonyAd ad) {
+	}
+
+	@Override
+	public void onAdColonyV4VCReward(AdColonyV4VCReward reward) {
+		if (reward.success()) {
+			int amount  = reward.amount();
+			String name = reward.name();
+		}
+	}
+
+	@Override
+	public void onAdColonyAdAttemptFinished(AdColonyAd ad) {
+	}
+
+	@Override
+	public void onAdColonyAdAvailabilityChange(final boolean available, String zone_id) {
+	}
+
 	private void InitNavigationView() {
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -164,6 +185,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
 		gridView.setNumColumns(HandleVCB.GetInstance().GetNumberColume());
 		gridView.setAdapter(new GridViewAdapter(HandleVCB.GetInstance().GetData()));
+	}
+
+	private void ShowVideo() {
 		AdColonyV4VCAd ad = new AdColonyV4VCAd().withConfirmationDialog().withResultsDialog().withListener(Main.this);
 		ad.show();
 	}
@@ -261,32 +285,5 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		navigationView.getMenu().findItem(R.id.nav_reward).setVisible(false);
 		preferences.putBoolean("registeredReward", true);
 		ShowSJC();
-	}
-
-	@Override
-	public void onAdColonyAdStarted(AdColonyAd ad) {
-		Log.print("");
-	}
-
-	@Override
-	public void onAdColonyV4VCReward(AdColonyV4VCReward reward) {
-		Log.print("");
-		if (reward.success()) {
-			int amount  = reward.amount();
-			String name = reward.name();
-
-			Log.print("name: " + name);
-			Log.print("amount: " + amount);
-		}
-	}
-
-	@Override
-	public void onAdColonyAdAttemptFinished(AdColonyAd ad) {
-		Log.print("");
-	}
-
-	@Override
-	public void onAdColonyAdAvailabilityChange(final boolean available, String zone_id) {
-		Log.print("");
 	}
 }
