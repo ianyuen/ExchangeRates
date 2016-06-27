@@ -8,6 +8,7 @@ import com.jirbo.adcolony.*;
 
 import com.iansoft.android.Log;
 import com.iansoft.android.Config;
+import com.iansoft.android.Constant;
 import com.iansoft.android.AdManager.FacebookBanner;
 import com.iansoft.android.JSONManager;
 import com.iansoft.android.EpochManager;
@@ -126,6 +127,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		if (hasFocus) {
 			navigationView.getMenu().findItem(R.id.nav_reward).setVisible(IsCanShowReward());
 			navigationView.getMenu().findItem(R.id.nav_upload).setVisible(IsCanShowUpload());
+			navigationView.getMenu().findItem(R.id.nav_hide_ads).setVisible(IsCanShowVideo());
 		} else {
 			JSONManager.GetInstance().SaveData();
 		}
@@ -140,6 +142,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		if (reward.success()) {
 			int amount  = reward.amount();
 			String name = reward.name();
+			preferences.putInt(Constant.HIDE_ALL_EXPIRED, epoch.getCurrentDate());
 		}
 	}
 
@@ -248,6 +251,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 			if (epoch.getCurrentDate() > preferences.getInt("currentDate")) {
 				return true;
 			}
+		}
+		return false;
+	}
+
+	private boolean IsCanShowVideo() {
+		int hideAdsExpried = preferences.getInt(Constant.HIDE_ALL_EXPIRED);
+		Log.print("hideAdsExpried: " + hideAdsExpried);
+		Log.print("getCurrentDate: " + epoch.getCurrentDate());
+		if (epoch.getCurrentDate() > hideAdsExpried) {
+			return true;
 		}
 		return false;
 	}

@@ -20,7 +20,7 @@ public class FacebookBanner implements AdListener {
 	private AdView adView = null;
 	private Activity activity = null;
 	private EpochManager epochManager = null;
-	private PreferencesManager preferencesManager = null;
+	private PreferencesManager preferences = null;
 
 	public FacebookBanner(Activity activity, String adID, View view) {
 		if (m_sInstance == null) {
@@ -29,25 +29,20 @@ public class FacebookBanner implements AdListener {
 		this.activity = activity;
 
 		epochManager = new EpochManager();
-		long currentEpoch = epochManager.getCurrentEpoch();
+		preferences = new PreferencesManager();
 
-		preferencesManager = new PreferencesManager();
-		long expriedHideAds = preferencesManager.getLong(Constant.HIDE_BANNER_EXPIRED);
+		if (IsCanShowAds()) {
+			AdSettings.addTestDevice(Config.GetInstance().getDeviceID());
 
-		if (!Config.GetInstance().getDebuggable()) {
-			if (currentEpoch - expriedHideAds > Constant.EXPRIED_TIME) {
-				AdSettings.addTestDevice(Config.GetInstance().getDeviceID());
+			adView = new AdView(activity, adID, AdSize.BANNER_HEIGHT_50);
+			adView.setAdListener(this);
+			adView.loadAd();
 
-				adView = new AdView(activity, adID, AdSize.BANNER_HEIGHT_50);
-				adView.setAdListener(this);
-				adView.loadAd();
-
-				RelativeLayout layout = (RelativeLayout)view;
-				RelativeLayout.LayoutParams bannerParameters = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-				bannerParameters.addRule(RelativeLayout.CENTER_HORIZONTAL);
-				bannerParameters.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-				layout.addView(adView, bannerParameters);
-			}
+			RelativeLayout layout = (RelativeLayout)view;
+			RelativeLayout.LayoutParams bannerParameters = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+			bannerParameters.addRule(RelativeLayout.CENTER_HORIZONTAL);
+			bannerParameters.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+			layout.addView(adView, bannerParameters);
 		}
 	}
 
@@ -80,7 +75,20 @@ public class FacebookBanner implements AdListener {
 
 	private void hideAds() {
 		long currentEpoch = epochManager.getCurrentEpoch();
-		preferencesManager.putLong(Constant.HIDE_BANNER_EXPIRED, currentEpoch + Constant.EXPRIED_TIME);
+		preferences.putLong(Constant.HIDE_BANNER_EXPIRED, currentEpoch + Constant.EXPRIED_TIME);
 		destroy();
+	}
+
+	private boolean IsCanShowAds() {
+		long currentEpoch = epochManager.getCurrentEpoch();
+		long expriedHideAds = preferences.getLong(Constant.HIDE_BANNER_EXPIRED);
+		if (!Config.GetInstance().getDebuggable()) {
+			if (epochManager.getCurrentDate() > preferences.getInt(Constant.HIDE_ALL_EXPIRED)) {
+				if (currentEpoch - expriedHideAds > Constant.EXPRIED_TIME) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
