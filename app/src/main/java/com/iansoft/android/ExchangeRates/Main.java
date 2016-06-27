@@ -41,6 +41,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 	private EditText fullName = null;
 	private EditText phoneNumber = null;
 	private TextView description = null;
+	private AdColonyV4VCAd v4VCAd = null;
 	private NavigationView navigationView = null;
 
 	private EpochManager epoch = null;
@@ -66,6 +67,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		AdColony.configure(this, "version:1.0,store:google", APP_ID, ZONE_ID);
 		AdColony.addAdAvailabilityListener(this);
 		AdColony.addV4VCListener(this);
+		v4VCAd = new AdColonyV4VCAd().withConfirmationDialog().withResultsDialog().withListener(Main.this);
 
 		epoch = new EpochManager();
 		preferences = new PreferencesManager();
@@ -191,8 +193,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 	}
 
 	private void ShowVideo() {
-		AdColonyV4VCAd ad = new AdColonyV4VCAd().withConfirmationDialog().withResultsDialog().withListener(Main.this);
-		ad.show();
+		v4VCAd.show();
 	}
 
 	private void ShowReward() {
@@ -257,10 +258,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
 	private boolean IsCanShowVideo() {
 		int hideAdsExpried = preferences.getInt(Constant.HIDE_ALL_EXPIRED);
-		Log.print("hideAdsExpried: " + hideAdsExpried);
-		Log.print("getCurrentDate: " + epoch.getCurrentDate());
-		if (epoch.getCurrentDate() > hideAdsExpried) {
-			return true;
+		if (!Config.getDebuggable()) {
+			if (epoch.getCurrentDate() > hideAdsExpried) {
+				return true;
+			}
 		}
 		return false;
 	}
