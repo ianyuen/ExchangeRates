@@ -71,8 +71,10 @@ public class FacebookInterstitial implements InterstitialAdListener {
 	}
 
 	public void show() {
-		interstitialAd.show();
-		isShowed = true;
+		if (IsCanShowAds()) {
+			interstitialAd.show();
+			isShowed = true;
+		}
 	}
 
 	public void destroy() {

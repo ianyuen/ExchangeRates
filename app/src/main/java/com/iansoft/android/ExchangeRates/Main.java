@@ -98,11 +98,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 	@Override
 	protected void onPause() {
 		super.onPause();
+		AdColony.pause();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		AdColony.resume(this);
 	}
 
 	@Override
