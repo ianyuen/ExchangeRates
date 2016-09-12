@@ -12,7 +12,6 @@ import com.iansoft.android.Constant;
 import com.iansoft.android.AdManager.FacebookBanner;
 import com.iansoft.android.JSONManager;
 import com.iansoft.android.EpochManager;
-import com.iansoft.android.ConnectServer;
 import com.iansoft.android.PreferencesManager;
 
 import java.util.ArrayList;
@@ -86,8 +85,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 			ShowVideo();
 		} else if (id == R.id.nav_reward) {
 			ShowReward();
-		} else if (id == R.id.nav_upload) {
-			UploadData();
 		}
 
 		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -130,7 +127,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 	public void onWindowFocusChanged(boolean hasFocus) {
 		if (hasFocus) {
 			navigationView.getMenu().findItem(R.id.nav_reward).setVisible(IsCanShowReward());
-			navigationView.getMenu().findItem(R.id.nav_upload).setVisible(IsCanShowUpload());
 			navigationView.getMenu().findItem(R.id.nav_hide_ads).setVisible(IsCanShowVideo());
 		} else {
 			JSONManager.GetInstance().SaveData();
@@ -147,13 +143,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 			int amount  = reward.amount();
 			String name = reward.name();
 			preferences.putInt(Constant.HIDE_ALL_EXPIRED, epoch.getCurrentDate());
-
-			String androidID = Config.getAndroidID();
-			String url = "https://docs.google.com/forms/d/1xsIgZLLR1IRmNWPlPzXyrTIsViFcW7UYM6dsy1XDxO8/formResponse";
-			String data = "rewarded=" + androidID + "&entry.874539945=" + androidID;
-
-			ConnectServer connect = new ConnectServer(this);
-			connect.sendPost(url, data);
 		}
 	}
 
@@ -214,57 +203,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		description.setVisibility(View.VISIBLE);
 	}
 
-	private void UploadData() {
-		preferences.putInt("currentDate", epoch.getCurrentDate());
-		navigationView.getMenu().findItem(R.id.nav_upload).setVisible(false);
-
-		ArrayList<String> needUpload = new ArrayList<String>();
-		needUpload.add("SJC");
-		needUpload.add("9999");
-		needUpload.add("24K");
-		needUpload.add("USD");
-		needUpload.add("AUD");
-		needUpload.add("EUR");
-		needUpload.add("GBP");
-		needUpload.add("JPY");
-
-		try {
-			JSONArray array = JSONManager.GetInstance().GetData();
-			for(int i = 0; i < array.length(); i++) {
-				JSONObject object = array.getJSONObject(i);
-				String id = object.getString("id");
-				String buy = object.getString("buy");
-				String sell = object.getString("sell");
-				if (needUpload.contains(id)) {
-					UploadExchange(id, buy, sell);
-				}
-			}
-		} catch (JSONException e) {
-			Log.print(e.toString());
-		}
-	}
-
-	private void UploadExchange(String exchangeID, String exchangeBuy, String exchangeSell) {
-		String url = "https://docs.google.com/forms/d/1yYqTmyh4oIbg1wQiECNRZhPcE7RLDO7dy2n20ruIEgU/formResponse";
-		
-		String id = "analytics=" + exchangeID + "&entry.1471248749=" + exchangeID;
-		String buy = "analytics=" + exchangeBuy + "&entry.311396850=" + exchangeBuy;
-		String sell = "analytics=" + exchangeSell + "&entry.1429083367=" + exchangeSell;
-		String data = id + "&" + buy + "&" + sell;
-
-		ConnectServer connect = new ConnectServer(this);
-		connect.sendPost(url, data);
-	}
-
-	private boolean IsCanShowUpload() {
-		if (Config.getDebuggable()) {
-			if (epoch.getCurrentDate() > preferences.getInt("currentDate")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private boolean IsCanShowVideo() {
 		int hideAdsExpried = preferences.getInt(Constant.HIDE_ALL_EXPIRED);
 		if (!Config.getDebuggable()) {
@@ -290,19 +228,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 			Toast.makeText(m_sInstance, getResources().getString(R.string.missing_phone), Toast.LENGTH_LONG).show();
 			return;
 		}
-
-		txtFullName.replace(" ", "%20");
-		String androidID = Config.getAndroidID();
-
-		String url = "https://docs.google.com/forms/d/1DWxOlmt8vXP6y2XLjiHxdJysOf1IdUdHR21R8568PA8/formResponse";
-
-		String id = "reward=" + androidID + "&entry.1341337758=" + androidID;
-		String name = "reward=" + txtFullName + "&entry.779451674=" + txtFullName;
-		String phone = "reward=" + txtPhoneNumber + "&entry.1497050153=" + txtPhoneNumber;
-		String data = id + "&" + name + "&" + phone;
-
-		ConnectServer connect = new ConnectServer(this);
-		connect.sendPost(url, data);
 
 		Toast.makeText(m_sInstance, getResources().getString(R.string.reward_notification), Toast.LENGTH_LONG).show();
 		navigationView.getMenu().findItem(R.id.nav_reward).setVisible(false);

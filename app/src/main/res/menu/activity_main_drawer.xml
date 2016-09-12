@@ -21,10 +21,6 @@
 				android:id="@+id/nav_reward"
 				android:title="Nhận quà"
 			/>
-			<item
-				android:id="@+id/nav_upload"
-				android:title="upload"
-			/>
 		</menu>
 	</item>
 </menu>

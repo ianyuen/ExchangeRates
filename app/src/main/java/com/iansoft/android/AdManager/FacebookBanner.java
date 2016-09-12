@@ -6,7 +6,6 @@ import com.iansoft.android.Log;
 import com.iansoft.android.Config;
 import com.iansoft.android.Constant;
 import com.iansoft.android.EpochManager;
-import com.iansoft.android.ConnectServer;
 import com.iansoft.android.PreferencesManager;
 
 import android.app.Activity;
@@ -57,14 +56,6 @@ public class FacebookBanner implements AdListener {
 	@Override
 	public void onAdClicked(Ad ad) {
 		hideAds();
-
-		String url = "https://docs.google.com/forms/d/15ZP18pvBtjtcajZLjQWWglJIaQSn-TaOVCt-b1ZnJ6w/formResponse";
-		String androidID = Config.getAndroidID();
-		String id = "clicked=" + androidID + "&entry.585703701=" + androidID;
-		String type = "clicked=banner_home_bottom&entry.272493976=banner_home_bottom";
-
-		ConnectServer connect = new ConnectServer(activity);
-		connect.sendPost(url, id + "&" + type);
 	}
 
 	public void destroy() {
