@@ -82,11 +82,9 @@ public class FacebookInterstitial implements InterstitialAdListener {
 	private boolean IsCanShowAds() {
 		long currentEpoch = epochManager.getCurrentEpoch();
 		long expriedHideAds = preferences.getLong(Constant.HIDE_INTERSTITIAL_EXPIRED);
-		if (!Config.GetInstance().getDebuggable()) {
-			if (epochManager.getCurrentDate() > preferences.getInt(Constant.HIDE_ALL_EXPIRED)) {
-				if (currentEpoch - expriedHideAds > Constant.EXPRIED_TIME) {
-					return true;
-				}
+		if (epochManager.getCurrentDate() > preferences.getInt(Constant.HIDE_ALL_EXPIRED)) {
+			if (currentEpoch - expriedHideAds > Constant.EXPRIED_TIME) {
+				return true;
 			}
 		}
 		return false;
